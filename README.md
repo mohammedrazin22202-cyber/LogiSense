@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🚛 TRACK FLEET COMMAND
 **Real-time Fleet Management System** — Rebuilt from scratch with live data from `orders_master.xlsx`
 
@@ -143,3 +144,7 @@ POST /api/vehicles/{id}/location
 - SSE clients stored in memory list (swap for Redis pub/sub at scale)
 - Simulation engine is threaded (won't block HTTP serving)
 - For 1000s of vehicles: replace SQLite with PostgreSQL, SSE with WebSocket + message broker
+=======
+# LogiSense
+LogiSense is a logistics platform that enables real-time fleet tracking, driver management, and shipment monitoring. It provides GPS-based visibility, trip details, and compliance alerts, helping optimize operations, improve efficiency, and ensure safe, transparent delivery management.
+>>>>>>> 40ba19410fd2ab00d34c9b3367723e573ae1580e
