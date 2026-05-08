@@ -1,0 +1,360 @@
+{
+  "collections": {
+    "vehicles": {
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "required": ["_id", "vehicle_type"],
+          "properties": {
+            "_id": { "bsonType": "string", "description": "Vehicle ID e.g. V001" },
+            "vehicle_type": { "bsonType": "string" },
+            "vehicle_number": { "bsonType": ["string", "null"] },
+            "plate_number": { "bsonType": ["string", "null"] },
+            "driver_name": { "bsonType": ["string", "null"] },
+            "driver_contact": { "bsonType": ["string", "null"] },
+            "status": {
+              "bsonType": "string",
+              "enum": ["idle", "moving", "maintenance", "offline"]
+            },
+            "current_lat": { "bsonType": ["double", "null"] },
+            "current_lng": { "bsonType": ["double", "null"] },
+            "current_speed": { "bsonType": ["double", "null"] },
+            "heading": { "bsonType": ["double", "null"] },
+            "current_order_id": { "bsonType": ["string", "null"] },
+            "assigned_route": { "bsonType": ["string", "null"] },
+            "last_updated": { "bsonType": ["string", "null"] },
+            "capacity_tons": { "bsonType": ["double", "null"] },
+            "capacity_cbm": { "bsonType": ["double", "null"] },
+            "insurance_expiry": { "bsonType": ["string", "null"] },
+            "maintenance_due": { "bsonType": ["string", "null"] },
+            "fuel_type": { "bsonType": "string" },
+            "assigned_driver_id": { "bsonType": ["string", "null"] },
+            "fuel_level_pct": { "bsonType": ["double", "null"] },
+            "odometer_km": { "bsonType": ["double", "null"] },
+            "loaded_distance_km": { "bsonType": ["double", "null"] },
+            "total_distance_km": { "bsonType": ["double", "null"] },
+            "engine_temp_c": { "bsonType": ["double", "null"] },
+            "engine_health": { "bsonType": "string" },
+            "permit_expiry": { "bsonType": ["string", "null"] },
+            "fitness_expiry": { "bsonType": ["string", "null"] },
+            "pollution_expiry": { "bsonType": ["string", "null"] },
+            "yard_slot": { "bsonType": ["string", "null"] },
+            "transport_mode": { "bsonType": "string" },
+            "created_at": { "bsonType": "string" }
+          }
+        }
+      },
+      "indexes": [
+        { "key": { "status": 1 } },
+        { "key": { "current_order_id": 1 } },
+        { "key": { "vehicle_number": 1 } }
+      ]
+    },
+
+    "orders": {
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "required": ["_id", "order_status"],
+          "properties": {
+            "_id": { "bsonType": "string", "description": "Order ID e.g. ORD001" },
+            "customer_name": { "bsonType": ["string", "null"] },
+            "customer_company": { "bsonType": ["string", "null"] },
+            "customer_contact": { "bsonType": ["string", "null"] },
+            "pickup_address": { "bsonType": ["string", "null"] },
+            "delivery_address": { "bsonType": ["string", "null"] },
+            "source_city": { "bsonType": ["string", "null"] },
+            "source_state": { "bsonType": ["string", "null"] },
+            "source_pincode": { "bsonType": ["string", "null"] },
+            "destination_city": { "bsonType": ["string", "null"] },
+            "destination_state": { "bsonType": ["string", "null"] },
+            "destination_pincode": { "bsonType": ["string", "null"] },
+            "goods_type": { "bsonType": ["string", "null"] },
+            "goods_category": { "bsonType": ["string", "null"] },
+            "quantity": { "bsonType": ["double", "null"] },
+            "unit": { "bsonType": ["string", "null"] },
+            "vehicle_id": { "bsonType": ["string", "null"] },
+            "vehicle_number": { "bsonType": ["string", "null"] },
+            "dispatch_datetime": { "bsonType": ["string", "null"] },
+            "expected_delivery_datetime": { "bsonType": ["string", "null"] },
+            "actual_delivery_datetime": { "bsonType": ["string", "null"] },
+            "distance_km": { "bsonType": ["double", "null"] },
+            "estimated_transit_hours": { "bsonType": ["double", "null"] },
+            "order_status": {
+              "bsonType": "string",
+              "enum": ["Created", "Dispatched", "In Transit", "Delivered", "Cancelled", "Delayed"]
+            },
+            "transport_cost_inr": { "bsonType": ["double", "null"] },
+            "lifecycle_stage": { "bsonType": "string" },
+            "pod_type": { "bsonType": ["string", "null"] },
+            "pod_reference": { "bsonType": ["string", "null"] },
+            "pod_collected_at": { "bsonType": ["string", "null"] },
+            "pod_status": { "bsonType": "string" },
+            "priority_tier": { "bsonType": "string" },
+            "weight_kg": { "bsonType": ["double", "null"] },
+            "sla_deadline": { "bsonType": ["string", "null"] },
+            "sla_breached": { "bsonType": "bool" },
+            "fuel_cost_inr": { "bsonType": ["double", "null"] },
+            "toll_cost_inr": { "bsonType": ["double", "null"] },
+            "client_id": { "bsonType": ["string", "null"] },
+            "requires_cold_chain": { "bsonType": "bool" },
+            "co2_kg": { "bsonType": ["double", "null"] },
+            "is_return": { "bsonType": "bool" },
+            "parent_order_id": { "bsonType": ["string", "null"] },
+            "consolidated_batch_id": { "bsonType": ["string", "null"] },
+            "hub_id": { "bsonType": ["string", "null"] }
+          }
+        }
+      },
+      "indexes": [
+        { "key": { "order_status": 1 } },
+        { "key": { "vehicle_id": 1 } },
+        { "key": { "client_id": 1 } },
+        { "key": { "dispatch_datetime": -1 } },
+        { "key": { "destination_city": 1 } },
+        { "key": { "sla_breached": 1 } }
+      ]
+    },
+
+    "drivers": {
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "required": ["_id", "name"],
+          "properties": {
+            "_id": { "bsonType": "string" },
+            "name": { "bsonType": "string" },
+            "contact": { "bsonType": ["string", "null"] },
+            "license_number": { "bsonType": ["string", "null"] },
+            "license_expiry": { "bsonType": ["string", "null"] },
+            "license_type": { "bsonType": ["string", "null"] },
+            "availability": { "bsonType": "string" },
+            "current_vehicle_id": { "bsonType": ["string", "null"] },
+            "working_hours_today": { "bsonType": ["double", "null"] },
+            "total_trips": { "bsonType": ["int", "null"] },
+            "rating": { "bsonType": ["double", "null"] },
+            "rating_count": { "bsonType": ["int", "null"] },
+            "joined_date": { "bsonType": ["string", "null"] },
+            "address": { "bsonType": ["string", "null"] },
+            "emergency_contact": { "bsonType": ["string", "null"] },
+            "created_at": { "bsonType": "string" }
+          }
+        }
+      },
+      "indexes": [
+        { "key": { "availability": 1 } },
+        { "key": { "current_vehicle_id": 1 } },
+        { "key": { "license_number": 1 }, "unique": true, "sparse": true }
+      ]
+    },
+
+    "warehouses": {
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "required": ["_id", "name"],
+          "properties": {
+            "_id": { "bsonType": "string" },
+            "name": { "bsonType": "string" },
+            "location": { "bsonType": ["string", "null"] },
+            "city": { "bsonType": ["string", "null"] },
+            "lat": { "bsonType": ["double", "null"] },
+            "lng": { "bsonType": ["double", "null"] },
+            "total_capacity_cbm": { "bsonType": ["double", "null"] },
+            "used_capacity_cbm": { "bsonType": ["double", "null"] },
+            "manager_name": { "bsonType": ["string", "null"] },
+            "contact": { "bsonType": ["string", "null"] },
+            "is_hub": { "bsonType": "bool" },
+            "created_at": { "bsonType": "string" }
+          }
+        }
+      },
+      "indexes": [
+        { "key": { "city": 1 } },
+        { "key": { "is_hub": 1 } }
+      ]
+    },
+
+    "vehicle_positions": {
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "required": ["vehicle_id", "lat", "lng", "recorded_at"],
+          "properties": {
+            "vehicle_id": { "bsonType": "string" },
+            "lat": { "bsonType": "double" },
+            "lng": { "bsonType": "double" },
+            "speed": { "bsonType": ["double", "null"] },
+            "heading": { "bsonType": ["double", "null"] },
+            "status": { "bsonType": "string" },
+            "order_id": { "bsonType": ["string", "null"] },
+            "fuel_level_pct": { "bsonType": ["double", "null"] },
+            "engine_temp_c": { "bsonType": ["double", "null"] },
+            "recorded_at": { "bsonType": "string" }
+          }
+        }
+      },
+      "indexes": [
+        { "key": { "vehicle_id": 1, "recorded_at": -1 } },
+        { "key": { "recorded_at": -1 } },
+        { "key": { "vehicle_id": 1 } }
+      ]
+    },
+
+    "alerts": {
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "required": ["alert_type", "created_at"],
+          "properties": {
+            "order_id": { "bsonType": ["string", "null"] },
+            "vehicle_id": { "bsonType": ["string", "null"] },
+            "alert_type": { "bsonType": "string" },
+            "alert_reason": { "bsonType": ["string", "null"] },
+            "severity": { "bsonType": "string", "enum": ["Low", "Medium", "High", "Critical"] },
+            "delay_minutes": { "bsonType": ["int", "null"] },
+            "acknowledged": { "bsonType": "bool" },
+            "incident_type": { "bsonType": ["string", "null"] },
+            "resolution_notes": { "bsonType": ["string", "null"] },
+            "resolved_at": { "bsonType": ["string", "null"] },
+            "created_at": { "bsonType": "string" }
+          }
+        }
+      },
+      "indexes": [
+        { "key": { "order_id": 1 } },
+        { "key": { "vehicle_id": 1 } },
+        { "key": { "acknowledged": 1 } },
+        { "key": { "severity": 1 } },
+        { "key": { "created_at": -1 } }
+      ]
+    },
+
+    "temperature_logs": {
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "required": ["order_id", "recorded_at"],
+          "properties": {
+            "order_id": { "bsonType": "string" },
+            "vehicle_id": { "bsonType": ["string", "null"] },
+            "temp_at_dispatch": { "bsonType": ["double", "null"] },
+            "temp_during_transit": { "bsonType": ["double", "null"] },
+            "temp_at_delivery": { "bsonType": ["double", "null"] },
+            "required_range": { "bsonType": ["string", "null"] },
+            "condition_status": { "bsonType": ["string", "null"] },
+            "recorded_at": { "bsonType": "string" }
+          }
+        }
+      },
+      "indexes": [
+        { "key": { "order_id": 1 } },
+        { "key": { "vehicle_id": 1 } },
+        { "key": { "recorded_at": -1 } }
+      ]
+    },
+
+    "trips": {
+      "validator": {
+        "$jsonSchema": {
+          "bsonType": "object",
+          "required": ["vehicle_id", "created_at"],
+          "properties": {
+            "vehicle_id": { "bsonType": "string" },
+            "order_id": { "bsonType": ["string", "null"] },
+            "route_id": { "bsonType": ["string", "null"] },
+            "trip_status": { "bsonType": "string" },
+            "planned_start": { "bsonType": ["string", "null"] },
+            "actual_start": { "bsonType": ["string", "null"] },
+            "hub_arrival": { "bsonType": ["string", "null"] },
+            "completed_at": { "bsonType": ["string", "null"] },
+            "distance_km": { "bsonType": ["double", "null"] },
+            "fuel_consumed_liters": { "bsonType": ["double", "null"] },
+            "notes": { "bsonType": ["string", "null"] },
+            "created_at": { "bsonType": "string" }
+          }
+        }
+      },
+      "indexes": [
+        { "key": { "vehicle_id": 1 } },
+        { "key": { "order_id": 1 } },
+        { "key": { "trip_status": 1 } }
+      ]
+    },
+
+    "fuel_logs": {
+      "indexes": [
+        { "key": { "vehicle_id": 1 } },
+        { "key": { "logged_at": -1 } }
+      ]
+    },
+
+    "maintenance_records": {
+      "indexes": [
+        { "key": { "vehicle_id": 1 } },
+        { "key": { "status": 1 } },
+        { "key": { "next_due_at": 1 } }
+      ]
+    },
+
+    "clients": {
+      "indexes": [
+        { "key": { "status": 1 } },
+        { "key": { "company_name": 1 } }
+      ]
+    },
+
+    "invoices": {
+      "indexes": [
+        { "key": { "client_id": 1 } },
+        { "key": { "order_id": 1 } },
+        { "key": { "status": 1 } },
+        { "key": { "invoice_date": -1 } }
+      ]
+    },
+
+    "notifications": {
+      "indexes": [
+        { "key": { "recipient_id": 1, "is_read": 1 } },
+        { "key": { "sent_at": -1 } },
+        { "key": { "order_id": 1 } }
+      ]
+    },
+
+    "incidents": {
+      "indexes": [
+        { "key": { "order_id": 1 } },
+        { "key": { "vehicle_id": 1 } },
+        { "key": { "claim_status": 1 } }
+      ]
+    },
+
+    "routes": {
+      "indexes": [
+        { "key": { "source_city": 1, "destination_city": 1 } }
+      ]
+    },
+
+    "geofences": {
+      "indexes": [
+        { "key": { "is_active": 1 } },
+        { "key": { "name": 1 } }
+      ]
+    },
+
+    "performance_kpis": {
+      "indexes": [
+        { "key": { "period_start": -1 } },
+        { "key": { "period_type": 1 } }
+      ]
+    },
+
+    "security_events": {
+      "indexes": [
+        { "key": { "vehicle_id": 1 } },
+        { "key": { "is_resolved": 1 } },
+        { "key": { "detected_at": -1 } }
+      ]
+    }
+  }
+}

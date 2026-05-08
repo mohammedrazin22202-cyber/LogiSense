@@ -1,0 +1,63 @@
+{
+  "connection": {
+    "uri": "mongodb://localhost:27017",
+    "database": "fleet_command",
+    "options": {
+      "serverSelectionTimeoutMS": 5000,
+      "connectTimeoutMS": 10000,
+      "maxPoolSize": 50,
+      "minPoolSize": 5,
+      "retryWrites": true,
+      "w": "majority"
+    }
+  },
+  "atlas": {
+    "uri": "mongodb+srv://<USERNAME>:<PASSWORD>@<CLUSTER>.mongodb.net/fleet_command?retryWrites=true&w=majority",
+    "note": "Replace <USERNAME>, <PASSWORD>, and <CLUSTER> with your Atlas credentials"
+  },
+  "collections": [
+    "vehicles",
+    "orders",
+    "drivers",
+    "warehouses",
+    "warehouse_zones",
+    "inventory",
+    "load_plans",
+    "dispatches",
+    "routes",
+    "trips",
+    "trip_events",
+    "vehicle_positions",
+    "alerts",
+    "temperature_logs",
+    "order_documents",
+    "clients",
+    "freight_rate_cards",
+    "geofences",
+    "geofence_events",
+    "fuel_logs",
+    "maintenance_records",
+    "sla_records",
+    "performance_kpis",
+    "notifications",
+    "incidents",
+    "insurance_policies",
+    "yard_slots",
+    "gate_logs",
+    "dock_schedules",
+    "containers",
+    "hub_transfers",
+    "cargo_inspections",
+    "cross_dock_events",
+    "carrier_partners",
+    "tenants",
+    "invoices",
+    "contracts",
+    "demand_forecasts",
+    "security_events",
+    "system_logs",
+    "consolidation_batches",
+    "network_analysis",
+    "staff"
+  ]
+}
