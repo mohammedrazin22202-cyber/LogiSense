@@ -1356,6 +1356,34 @@ function selectLoginType(type) {
     document.getElementById('roleChooser').style.display = 'none';
     document.getElementById('adminForm').style.display = type === 'admin' ? 'block' : 'none';
     document.getElementById('customerForm').style.display = type === 'customer' ? 'block' : 'none';
+
+    if (type === 'admin') {
+        // Auto-fill admin credentials
+        document.getElementById('adminUser').value = ADMIN_CREDS.user;
+        document.getElementById('adminPass').value = ADMIN_CREDS.pass;
+        
+        // Auto-fill PIN
+        const pinBoxes = document.querySelectorAll('#pinBoxes .otp-box');
+        const pinVal = ADMIN_CREDS.pin.split('');
+        pinBoxes.forEach((b, i) => b.value = pinVal[i] || '');
+
+        // Auto-fill OTP
+        const otpBoxes = document.querySelectorAll('#otpBoxes .otp-box');
+        const otpVal = ADMIN_CREDS.otp.split('');
+        otpBoxes.forEach((b, i) => b.value = otpVal[i] || '');
+
+        // Directly display OTP verification panel
+        document.getElementById('otpStep1').style.display = 'none';
+        document.getElementById('otpStep2').style.display = 'block';
+    } else if (type === 'customer') {
+        // Auto-fill customer tracking credentials
+        document.getElementById('customerOrderId').value = 'AHE1417';
+        document.getElementById('customerContact').value = '8248223344';
+
+        // Auto-fill customer account login credentials
+        document.getElementById('custEmail').value = 'customer@logisense.com';
+        document.getElementById('custPassword').value = 'password123';
+    }
 }
 function resetLoginType() {
     document.getElementById('roleChooser').style.display = 'flex';
@@ -2786,6 +2814,86 @@ const DriverState = {
     otpCode: null,
 };
 
+// Fetch all drivers/vehicles and populate dropdown
+async function loadDriverDropdown() {
+    const select = document.getElementById('driverSelect');
+    if (!select) return;
+    try {
+        const res = await fetch('/api/vehicles');
+        if (!res.ok) return;
+        const data = await res.json();
+        const vehicles = data.data || data.vehicles || [];
+        
+        // Clear previous options except first one
+        select.innerHTML = '<option value="">-- Select Available Driver --</option>';
+        
+        vehicles.forEach(v => {
+            if (v.driver_name) {
+                const opt = document.createElement('option');
+                opt.value = JSON.stringify({
+                    id: v.id,
+                    name: v.driver_name,
+                    contact: v.driver_contact || ''
+                });
+                opt.textContent = `${v.driver_name} (${v.id})`;
+                select.appendChild(opt);
+            }
+        });
+    } catch (e) {
+        console.error("Failed to load drivers for dropdown:", e);
+    }
+}
+
+function setupDriverSelectListener() {
+    const select = document.getElementById('driverSelect');
+    if (!select || select.dataset.listenerAttached === 'true') return;
+    select.dataset.listenerAttached = 'true';
+    
+    select.addEventListener('change', () => {
+        const val = select.value;
+        const errEl = document.getElementById('driverError');
+        if (errEl) errEl.style.display = 'none';
+        
+        if (!val) {
+            document.getElementById('driverVehicleId').value = '';
+            document.getElementById('driverContact').value = '';
+            document.querySelectorAll('#driverPinBoxes .otp-box').forEach(b => b.value = '');
+            document.querySelectorAll('#driverOtpBoxes .otp-box').forEach(b => b.value = '');
+            return;
+        }
+        
+        try {
+            const info = JSON.parse(val);
+            document.getElementById('driverVehicleId').value = info.id;
+            
+            // Format/strip contact
+            let contact = info.contact || '';
+            document.getElementById('driverContact').value = contact;
+            
+            // Pre-fill PIN: default is last 4 digits of contact number
+            let digits = contact.replace(/\D/g, '');
+            let pinVal = '';
+            if (digits.length >= 4) {
+                pinVal = digits.slice(-4);
+            } else {
+                pinVal = '1234'; // fallback default PIN if contact is too short
+            }
+            const pinBoxes = document.querySelectorAll('#driverPinBoxes .otp-box');
+            const pinDigits = pinVal.split('');
+            pinBoxes.forEach((b, i) => b.value = pinDigits[i] || '');
+            
+            // Pre-fill OTP if already generated
+            if (DriverState.otpCode) {
+                const otpBoxes = document.querySelectorAll('#driverOtpBoxes .otp-box');
+                const otpDigits = DriverState.otpCode.split('');
+                otpBoxes.forEach((b, i) => b.value = otpDigits[i] || '');
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    });
+}
+
 // Wire driver type into existing selectLoginType / resetLoginType
 const _origSelectLoginType = selectLoginType;
 selectLoginType = function (type) {
@@ -2796,6 +2904,9 @@ selectLoginType = function (type) {
         // hide admin & customer
         document.getElementById('adminForm').style.display = 'none';
         document.getElementById('customerForm').style.display = 'none';
+        
+        loadDriverDropdown();
+        setupDriverSelectListener();
     }
 };
 
@@ -2806,6 +2917,8 @@ resetLoginType = function () {
     if (df) df.style.display = 'none';
     const err = document.getElementById('driverError');
     if (err) err.style.display = 'none';
+    const select = document.getElementById('driverSelect');
+    if (select) select.value = '';
 };
 
 // ── Driver Auth Tab Switcher ─────────────────────────────────────────────────
@@ -2840,6 +2953,11 @@ function sendDriverOtp() {
     document.getElementById('driverOtpStep1').style.display = 'none';
     document.getElementById('driverOtpStep2').style.display = '';
     showToast(`Demo OTP: ${DriverState.otpCode}`, 'info', 15000);
+    
+    // Auto-fill generated OTP boxes
+    const otpBoxes = document.querySelectorAll('#driverOtpBoxes .otp-box');
+    const otpDigits = DriverState.otpCode.split('');
+    otpBoxes.forEach((b, i) => b.value = otpDigits[i] || '');
 }
 
 function resetDriverOtp() {
@@ -2847,6 +2965,11 @@ function resetDriverOtp() {
     document.querySelectorAll('#driverOtpBoxes .otp-box').forEach(b => b.value = '');
     document.querySelectorAll('#driverOtpBoxes .otp-box')[0]?.focus();
     showToast(`New OTP: ${DriverState.otpCode}`, 'info', 15000);
+    
+    // Auto-fill generated OTP boxes
+    const otpBoxes = document.querySelectorAll('#driverOtpBoxes .otp-box');
+    const otpDigits = DriverState.otpCode.split('');
+    otpBoxes.forEach((b, i) => b.value = otpDigits[i] || '');
 }
 
 async function doDriverLogin(mode) {
@@ -5342,6 +5465,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('customerOrderId')?.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('customerContact')?.focus(); });
     document.getElementById('driverContact')?.addEventListener('keydown', e => { if (e.key === 'Enter') doDriverLogin(); });
     document.getElementById('driverVehicleId')?.addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('driverContact')?.focus(); });
+
+    // Load driver dropdown and listener on boot
+    loadDriverDropdown();
+    setupDriverSelectListener();
 });
 
 // ══════════════════════════════════════════════════════════════

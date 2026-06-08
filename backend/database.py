@@ -730,6 +730,12 @@ def _init_sqlite():
         except Exception:
             pass
 
+    try:
+        conn.execute("INSERT OR IGNORE INTO customer_accounts (id, name, email, password, phone, company) VALUES (1, 'Demo Customer', 'customer@logisense.com', 'password123', '9840112233', 'Demo Corp')")
+        conn.commit()
+    except Exception as e:
+        logger.warning("Failed to seed default customer account: %s", e)
+
     conn.close()
     logger.info("SQLite database initialised at %s", DB_PATH)
 
