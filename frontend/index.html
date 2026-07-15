@@ -20,27 +20,38 @@
     <div id="demoDisclaimer" class="disclaimer-overlay" style="display: none;">
         <div class="scanlines"></div>
         <div class="disclaimer-card">
+            <div class="disclaimer-glow"></div>
             <div class="disclaimer-header">
-                <i class="fas fa-exclamation-triangle disclaimer-icon"></i>
-                <div class="disclaimer-title">DEMO ENVIRONMENT NOTICE</div>
+                <div class="disclaimer-icon-wrapper">
+                    <i class="fas fa-exclamation-triangle disclaimer-icon"></i>
+                </div>
+                <div class="disclaimer-title">Demo System Notice</div>
             </div>
             <div class="disclaimer-body">
-                <p>This is a <strong>live interactive demonstration</strong> of the LogiSense 360 Command Center. This is <strong>not a production server</strong>.</p>
-                <p>To facilitate general viewing, certain secure functionalities and authentication mechanisms have been altered:</p>
-                <ul>
-                    <li>
-                        <i class="fas fa-key"></i>
-                        <span><strong>Bypassed Security:</strong> In production, logging into the enterprise system requires a physical <strong>USB Security Auth Key</strong>. This has been bypassed to allow public browser access for reviewers.</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-sliders-h"></i>
-                        <span><strong>Simulation Mode:</strong> Some advanced configuration panel details and database writing rights have been simulated, allowing viewers to completely explore the dashboard without affecting live fleets.</span>
-                    </li>
-                </ul>
-                <p class="disclaimer-footer-text">LogiSense 360 • Demo Sandbox</p>
+                <p class="disclaimer-lead">This is a <strong>live interactive demonstration</strong> of the LogiSense 360 Command Center. This is <strong>not a production server</strong>.</p>
+                
+                <div class="disclaimer-info-grid">
+                    <div class="disclaimer-info-card">
+                        <div class="dic-icon"><i class="fas fa-key"></i></div>
+                        <div class="dic-content">
+                            <h4>Bypassed Security</h4>
+                            <p>In production, login requires a corporate physical <strong>USB Security Auth Key</strong>. This has been bypassed to allow public browser access for review.</p>
+                        </div>
+                    </div>
+                    <div class="disclaimer-info-card">
+                        <div class="dic-icon"><i class="fas fa-sliders-h"></i></div>
+                        <div class="dic-content">
+                            <h4>Simulation Mode</h4>
+                            <p>Certain write operations and administrative configuration options have been simulated, allowing viewers to completely explore the dashboard.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="disclaimer-footer-text">LOGISENSE 360 • DEMO SANDBOX</p>
             </div>
             <button class="disclaimer-btn" onclick="acceptDisclaimer()">
-                <i class="fas fa-check-circle"></i> Acknowledge & Proceed
+                <span>Acknowledge & Proceed</span>
+                <i class="fas fa-arrow-right"></i>
             </button>
         </div>
     </div>
