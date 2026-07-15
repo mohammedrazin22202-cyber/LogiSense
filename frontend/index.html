@@ -16,6 +16,40 @@
 
 <body>
 
+    <!-- ═══════════ DEMO DISCLAIMER ═══════════ -->
+    <div id="demoDisclaimer" class="disclaimer-overlay" style="display: none;">
+        <div class="scanlines"></div>
+        <div class="disclaimer-card">
+            <div class="disclaimer-header">
+                <i class="fas fa-exclamation-triangle disclaimer-icon"></i>
+                <div class="disclaimer-title">DEMO ENVIRONMENT NOTICE</div>
+            </div>
+            <div class="disclaimer-body">
+                <p>This is a <strong>live interactive demonstration</strong> of the LogiSense 360 Command Center. This is <strong>not a production server</strong>.</p>
+                <p>To facilitate general viewing, certain secure functionalities and authentication mechanisms have been altered:</p>
+                <ul>
+                    <li>
+                        <i class="fas fa-key"></i>
+                        <span><strong>Bypassed Security:</strong> In production, logging into the enterprise system requires a physical <strong>USB Security Auth Key</strong>. This has been bypassed to allow public browser access for reviewers.</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-sliders-h"></i>
+                        <span><strong>Simulation Mode:</strong> Some advanced configuration panel details and database writing rights have been simulated, allowing viewers to completely explore the dashboard without affecting live fleets.</span>
+                    </li>
+                </ul>
+                <p class="disclaimer-footer-text">LogiSense 360 • Demo Sandbox</p>
+            </div>
+            <button class="disclaimer-btn" onclick="acceptDisclaimer()">
+                <i class="fas fa-check-circle"></i> Acknowledge & Proceed
+            </button>
+        </div>
+    </div>
+    <script>
+        if (sessionStorage.getItem('disclaimer-accepted') !== 'true') {
+            document.getElementById('demoDisclaimer').style.display = 'flex';
+        }
+    </script>
+
     <!-- ═══════════ LOGIN SCREEN ═══════════ -->
     <div id="loginScreen" class="login-screen">
         <div class="scanlines"></div>

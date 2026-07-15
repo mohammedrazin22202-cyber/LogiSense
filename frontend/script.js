@@ -8117,3 +8117,14 @@ doDriverSignOut = function () {
     setAvailability('Available');
     _origSignOut2();
 };
+
+function acceptDisclaimer() {
+    const disclaimer = document.getElementById('demoDisclaimer');
+    if (disclaimer) {
+        disclaimer.classList.add('fade-out');
+        setTimeout(() => {
+            disclaimer.style.display = 'none';
+        }, 400);
+    }
+    sessionStorage.setItem('disclaimer-accepted', 'true');
+}
